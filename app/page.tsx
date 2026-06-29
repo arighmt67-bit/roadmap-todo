@@ -1,13 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
-import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy, Landmark } from "lucide-react";
+import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy, Server, Boxes } from "lucide-react";
 import { phases } from "./data";
 import { bcaPhases } from "./bca-data";
+import { devopsPhases } from "./devops-data";
+
+type TabId = "general" | "backend" | "devops";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"general" | "bca">("general");
+  const [activeTab, setActiveTab] = useState<TabId>("general");
   const [generalData, setGeneralData] = useState(phases);
-  const [bcaData, setBcaData] = useState(bcaPhases);
+  const [backendData, setBackendData] = useState(bcaPhases);
+  const [devopsData, setDevopsData] = useState(devopsPhases);
   const [expandedPhase, setExpandedPhase] = useState<string | null>(phases[0].id);
   const [mounted, setMounted] = useState(false);
 
@@ -17,23 +21,37 @@ export default function Home() {
     if (savedGeneral) {
       try { setGeneralData(JSON.parse(savedGeneral)); } catch (e) { }
     } else {
-      localStorage.removeItem("roadmap-progress-v2");
       localStorage.setItem("roadmap-progress-v3", JSON.stringify(phases));
     }
-    
-    const savedBca = localStorage.getItem("roadmap-bca-v1");
-    if (savedBca) {
-      try { setBcaData(JSON.parse(savedBca)); } catch (e) { }
+
+    const savedBackend = localStorage.getItem("roadmap-backend-v1");
+    if (savedBackend) {
+      try { setBackendData(JSON.parse(savedBackend)); } catch (e) { }
     } else {
-      localStorage.setItem("roadmap-bca-v1", JSON.stringify(bcaPhases));
+      localStorage.setItem("roadmap-backend-v1", JSON.stringify(bcaPhases));
+    }
+
+    const savedDevops = localStorage.getItem("roadmap-devops-v1");
+    if (savedDevops) {
+      try { setDevopsData(JSON.parse(savedDevops)); } catch (e) { }
+    } else {
+      localStorage.setItem("roadmap-devops-v1", JSON.stringify(devopsPhases));
     }
   }, []);
 
-  const currentData = activeTab === "general" ? generalData : bcaData;
+  const getDataForTab = (tab: TabId) => {
+    switch (tab) {
+      case "general": return generalData;
+      case "backend": return backendData;
+      case "devops": return devopsData;
+    }
+  };
+
+  const currentData = getDataForTab(activeTab);
 
   const toggleTask = (phaseId: string, taskId: string) => {
-    const setData = activeTab === "general" ? setGeneralData : setBcaData;
-    const storageKey = activeTab === "general" ? "roadmap-progress-v3" : "roadmap-bca-v1";
+    const setData = activeTab === "general" ? setGeneralData : activeTab === "backend" ? setBackendData : setDevopsData;
+    const storageKey = activeTab === "general" ? "roadmap-progress-v3" : activeTab === "backend" ? "roadmap-backend-v1" : "roadmap-devops-v1";
 
     const newData = currentData.map((phase) => {
       if (phase.id === phaseId) {
@@ -50,13 +68,19 @@ export default function Home() {
     localStorage.setItem(storageKey, JSON.stringify(newData));
   };
 
-  const handleTabChange = (tab: "general" | "bca") => {
+  const handleTabChange = (tab: TabId) => {
     setActiveTab(tab);
-    const firstId = tab === "general" ? phases[0].id : bcaPhases[0].id;
+    const firstId = tab === "general" ? phases[0].id : tab === "backend" ? bcaPhases[0].id : devopsPhases[0].id;
     setExpandedPhase(firstId);
   };
 
   if (!mounted) return null;
+
+  const tabs = [
+    { id: "general" as TabId, label: "General Roadmap", icon: Terminal },
+    { id: "backend" as TabId, label: "Backend", icon: Server },
+    { id: "devops" as TabId, label: "DevOps", icon: Boxes },
+  ];
 
   return (
     <div className="min-h-screen bg-[#0a0a23] text-gray-200 font-sans selection:bg-blue-500/30 pb-20">
@@ -73,34 +97,29 @@ export default function Home() {
       <main className="max-w-4xl mx-auto px-4 mt-12">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white mb-4">IT Support to SRE / DevOps / Backend</h2>
-          <p className="text-xl text-gray-400">Follow this 24-month curriculum to transition into Cloud & Backend roles.</p>
+          <p className="text-xl text-gray-400">Follow this curriculum to transition into Cloud & Backend roles.</p>
         </div>
 
         {/* TAB NAVIGATION */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex rounded-lg border border-gray-700 bg-[#1b1b32] p-1">
-            <button
-              onClick={() => handleTabChange("general")}
-              className={`px-6 py-2.5 rounded-md text-sm font-bold transition-all flex items-center gap-2 ${
-                activeTab === "general"
-                  ? "bg-blue-600 text-white shadow"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <Terminal className="w-4 h-4" />
-              General Roadmap
-            </button>
-            <button
-              onClick={() => handleTabChange("bca")}
-              className={`px-6 py-2.5 rounded-md text-sm font-bold transition-all flex items-center gap-2 ${
-                activeTab === "bca"
-                  ? "bg-blue-600 text-white shadow"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <Landmark className="w-4 h-4" />
-              BCA Digital Track
-            </button>
+        <div className="flex flex-wrap justify-center mb-8 gap-2">
+          <div className="inline-flex flex-wrap rounded-lg border border-gray-700 bg-[#1b1b32] p-1">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`px-4 md:px-6 py-2.5 rounded-md text-sm font-bold transition-all flex items-center gap-2 ${
+                    activeTab === tab.id
+                      ? "bg-blue-600 text-white shadow"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
