@@ -1,29 +1,41 @@
 "use client";
 import { useState, useEffect } from "react";
-import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy } from "lucide-react";
+import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy, Landmark } from "lucide-react";
 import { phases } from "./data";
+import { bcaPhases } from "./bca-data";
 
 export default function Home() {
-  const [todoData, setTodoData] = useState(phases);
+  const [activeTab, setActiveTab] = useState<"general" | "bca">("general");
+  const [generalData, setGeneralData] = useState(phases);
+  const [bcaData, setBcaData] = useState(bcaPhases);
   const [expandedPhase, setExpandedPhase] = useState<string | null>(phases[0].id);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem("roadmap-progress-v3");
-    if (saved) {
-      try {
-        setTodoData(JSON.parse(saved));
-      } catch (e) { }
+    const savedGeneral = localStorage.getItem("roadmap-progress-v3");
+    if (savedGeneral) {
+      try { setGeneralData(JSON.parse(savedGeneral)); } catch (e) { }
     } else {
       localStorage.removeItem("roadmap-progress-v2");
-      localStorage.removeItem("roadmap-progress");
       localStorage.setItem("roadmap-progress-v3", JSON.stringify(phases));
+    }
+    
+    const savedBca = localStorage.getItem("roadmap-bca-v1");
+    if (savedBca) {
+      try { setBcaData(JSON.parse(savedBca)); } catch (e) { }
+    } else {
+      localStorage.setItem("roadmap-bca-v1", JSON.stringify(bcaPhases));
     }
   }, []);
 
+  const currentData = activeTab === "general" ? generalData : bcaData;
+
   const toggleTask = (phaseId: string, taskId: string) => {
-    const newData = todoData.map((phase) => {
+    const setData = activeTab === "general" ? setGeneralData : setBcaData;
+    const storageKey = activeTab === "general" ? "roadmap-progress-v3" : "roadmap-bca-v1";
+
+    const newData = currentData.map((phase) => {
       if (phase.id === phaseId) {
         return {
           ...phase,
@@ -34,8 +46,14 @@ export default function Home() {
       }
       return phase;
     });
-    setTodoData(newData);
-    localStorage.setItem("roadmap-progress-v3", JSON.stringify(newData));
+    setData(newData);
+    localStorage.setItem(storageKey, JSON.stringify(newData));
+  };
+
+  const handleTabChange = (tab: "general" | "bca") => {
+    setActiveTab(tab);
+    const firstId = tab === "general" ? phases[0].id : bcaPhases[0].id;
+    setExpandedPhase(firstId);
   };
 
   if (!mounted) return null;
@@ -58,8 +76,36 @@ export default function Home() {
           <p className="text-xl text-gray-400">Follow this 24-month curriculum to transition into Cloud & Backend roles.</p>
         </div>
 
+        {/* TAB NAVIGATION */}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex rounded-lg border border-gray-700 bg-[#1b1b32] p-1">
+            <button
+              onClick={() => handleTabChange("general")}
+              className={`px-6 py-2.5 rounded-md text-sm font-bold transition-all flex items-center gap-2 ${
+                activeTab === "general"
+                  ? "bg-blue-600 text-white shadow"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              <Terminal className="w-4 h-4" />
+              General Roadmap
+            </button>
+            <button
+              onClick={() => handleTabChange("bca")}
+              className={`px-6 py-2.5 rounded-md text-sm font-bold transition-all flex items-center gap-2 ${
+                activeTab === "bca"
+                  ? "bg-blue-600 text-white shadow"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              <Landmark className="w-4 h-4" />
+              BCA Digital Track
+            </button>
+          </div>
+        </div>
+
         <div className="space-y-4">
-          {todoData.map((phase) => {
+          {currentData.map((phase) => {
             const tasksTotal = phase.tasks.length;
             const tasksDone = phase.tasks.filter(t => t.done).length;
             const isCompleted = tasksTotal > 0 && tasksTotal === tasksDone;
@@ -114,7 +160,6 @@ export default function Home() {
                                 )}
                               </span>
                               
-                              {/* SUB-TASKS LIST */}
                               {task.details && task.details.length > 0 && (
                                 <ul className={`list-disc pl-5 space-y-1.5 text-sm ${task.done ? 'text-gray-600' : 'text-gray-300'}`}>
                                   {task.details.map((detail, idx) => (
