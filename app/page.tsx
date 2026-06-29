@@ -10,11 +10,16 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem("roadmap-progress");
+    // Use a new storage key to force cache invalidation on the client side
+    const saved = localStorage.getItem("roadmap-progress-v2");
     if (saved) {
       try {
         setTodoData(JSON.parse(saved));
       } catch (e) { }
+    } else {
+      // Clear old cache entirely
+      localStorage.removeItem("roadmap-progress");
+      localStorage.setItem("roadmap-progress-v2", JSON.stringify(phases));
     }
   }, []);
 
@@ -31,7 +36,7 @@ export default function Home() {
       return phase;
     });
     setTodoData(newData);
-    localStorage.setItem("roadmap-progress", JSON.stringify(newData));
+    localStorage.setItem("roadmap-progress-v2", JSON.stringify(newData));
   };
 
   if (!mounted) return null;
@@ -112,6 +117,8 @@ export default function Home() {
                             <span className={`text-base flex-1 ${task.done ? 'text-gray-500 line-through' : 'text-gray-200'}`}>
                               {task.title.includes('🎯') ? (
                                 <span className={task.done ? 'text-gray-500' : 'text-yellow-400 font-semibold'}>{task.title}</span>
+                              ) : task.title.includes('🚀') ? (
+                                <span className={task.done ? 'text-gray-500' : 'text-blue-400 font-medium'}>{task.title}</span>
                               ) : (
                                 task.title
                               )}
