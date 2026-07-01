@@ -1,17 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
-import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy, Server, Boxes, ShieldAlert } from "lucide-react";
+import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy, Server, Boxes, ShieldAlert, MonitorSmartphone } from "lucide-react";
 import { phases } from "./data";
 import { bcaPhases } from "./bca-data";
 import { devopsPhases } from "./devops-data";
 import { srePhases } from "./sre-data";
+import { frontendPhases } from "./frontend-data";
 
-type TabId = "general" | "backend" | "devops" | "sre";
+type TabId = "general" | "backend" | "frontend" | "devops" | "sre";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabId>("general");
   const [generalData, setGeneralData] = useState(phases);
   const [backendData, setBackendData] = useState(bcaPhases);
+  const [frontendData, setFrontendData] = useState(frontendPhases);
   const [devopsData, setDevopsData] = useState(devopsPhases);
   const [sreData, setSreData] = useState(srePhases);
   const [expandedPhase, setExpandedPhase] = useState<string | null>(phases[0].id);
@@ -46,12 +48,20 @@ export default function Home() {
     } else {
       localStorage.setItem("roadmap-sre-v1", JSON.stringify(srePhases));
     }
+
+    const savedFrontend = localStorage.getItem("roadmap-frontend-v1");
+    if (savedFrontend) {
+      try { setFrontendData(JSON.parse(savedFrontend)); } catch (e) {}
+    } else {
+      localStorage.setItem("roadmap-frontend-v1", JSON.stringify(frontendPhases));
+    }
   }, []);
 
   const getDataForTab = (tab: TabId) => {
     switch (tab) {
       case "general": return generalData;
       case "backend": return backendData;
+      case "frontend": return frontendData;
       case "devops": return devopsData;
       case "sre": return sreData;
     }
@@ -60,8 +70,8 @@ export default function Home() {
   const currentData = getDataForTab(activeTab);
 
   const toggleTask = (phaseId: string, taskId: string) => {
-    const setData = activeTab === "general" ? setGeneralData : activeTab === "backend" ? setBackendData : activeTab === "devops" ? setDevopsData : setSreData;
-    const storageKey = activeTab === "general" ? "roadmap-progress-v3" : activeTab === "backend" ? "roadmap-backend-v1" : activeTab === "devops" ? "roadmap-devops-v1" : "roadmap-sre-v1";
+    const setData = activeTab === "general" ? setGeneralData : activeTab === "backend" ? setBackendData : activeTab === "frontend" ? setFrontendData : activeTab === "devops" ? setDevopsData : setSreData;
+    const storageKey = activeTab === "general" ? "roadmap-progress-v3" : activeTab === "backend" ? "roadmap-backend-v1" : activeTab === "frontend" ? "roadmap-frontend-v1" : activeTab === "devops" ? "roadmap-devops-v1" : "roadmap-sre-v1";
 
     const newData = currentData.map((phase) => {
       if (phase.id === phaseId) {
@@ -80,7 +90,7 @@ export default function Home() {
 
   const handleTabChange = (tab: TabId) => {
     setActiveTab(tab);
-    const firstId = tab === "general" ? phases[0].id : tab === "backend" ? bcaPhases[0].id : tab === "devops" ? devopsPhases[0].id : srePhases[0].id;
+    const firstId = tab === "general" ? phases[0].id : tab === "backend" ? bcaPhases[0].id : tab === "frontend" ? frontendPhases[0].id : tab === "devops" ? devopsPhases[0].id : srePhases[0].id;
     setExpandedPhase(firstId);
   };
 
@@ -89,6 +99,7 @@ export default function Home() {
   const tabs = [
     { id: "general" as TabId, label: "General Roadmap", icon: Terminal },
     { id: "backend" as TabId, label: "Backend", icon: Server },
+    { id: "frontend" as TabId, label: "Frontend", icon: MonitorSmartphone },
     { id: "devops" as TabId, label: "DevOps", icon: Boxes },
     { id: "sre" as TabId, label: "SRE (Fintech)", icon: ShieldAlert },
   ];
