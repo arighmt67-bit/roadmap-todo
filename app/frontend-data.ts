@@ -426,5 +426,106 @@ export const frontendPhases = [
         ]
       }
     ]
+  },
+  {
+    id: "fe-6",
+    title: "FRONTEND — Sprint 6: Multi-Language (i18n), Tailwind & Trading Platform (Bulan 11–12)",
+    description: "Spesifik untuk fintech/trading (MIFX, Stockbit): i18n, advanced Tailwind, real-time chart, & SEO.",
+    project: "multi-lang-trading-platform (MIFX-style)",
+    tasks: [
+      {
+        id: "fe6-1",
+        title: "i18n (Internationalization) & Multi-Language",
+        done: false,
+        details: [
+          "Konsep i18n vs l10n: internationalization vs localization",
+          "next-intl / next-i18next: setup multi-language di Next.js App Router",
+          "Translation files: messages/en.json, messages/id.json (key-value pair)",
+          "Locale routing: /en/dashboard, /id/dashboard (middleware redirect)",
+          "Language switcher component (toggle tanpa reload page)",
+          "Pluralization & gender rules: '1 item' vs '5 items'",
+          "Date/Time/Number formatting: Intl.DateTimeFormat, Intl.NumberFormat, currency",
+          "RTL (Right-to-Left) support untuk Bahasa Arab/Hebrew (kalau dibutuhkan)",
+          "Server-side translation: getTranslations() di Server Component",
+          "Client-side translation: useTranslations() hook"
+        ]
+      },
+      {
+        id: "fe6-2",
+        title: "Advanced Tailwind CSS",
+        done: false,
+        details: [
+          "Tailwind v4 setup: @import 'tailwindcss', @theme inline {} block, PostCSS config",
+          "Custom theme: color palette, spacing scale, typography, breakpoints",
+          "Utility patterns: flex, grid, container, responsive prefix (sm:, md:, lg:)",
+          "Component composition: @apply di CSS, atau clsx/cva untuk variant",
+          "Dark mode: class strategy (dark:), CSS variables integration",
+          "Animation: transition, keyframes, custom animation via @theme",
+          "Responsive design system: mobile-first, clamp() untuk fluid typography",
+          "Tailwind plugin: forms, typography, aspect-ratio",
+          "Performance: PurgeCSS (otomatis di production), critical CSS extraction",
+          "Design tokens: map Figma variables ke Tailwind theme config"
+        ]
+      },
+      {
+        id: "fe6-3",
+        title: "Real-Time Data & Trading UI Patterns",
+        done: false,
+        details: [
+          "WebSocket integration: connect ke price feed (crypto/forex/stock)",
+          "Reconnect strategy: exponential backoff, heartbeat, connection state",
+          "Real-time charting: lightweight-charts (TradingView) atau recharts",
+          "Optimized rendering: batch updates, requestAnimationFrame, throttle tick data",
+          "Order book UI: virtualized list (react-window), bid/ask spread visualization",
+          "Market watch table: sortable, filterable, real-time price flash (green/red)",
+          "Candlestick chart: OHLC data, timeframe switching (1m, 5m, 1h, 1D)",
+          "State management untuk high-frequency update: Zustand + transient updates"
+        ]
+      },
+      {
+        id: "fe6-4",
+        title: "Advanced Next.js Patterns (Pages Router & App Router)",
+        done: false,
+        details: [
+          "Pages Router: _app.tsx, _document.tsx, getStaticProps, getServerSideProps",
+          "Migration: Pages Router → App Router (strategi & common pitfalls)",
+          "Advanced routing: catch-all ([...slug]), optional catch-all ([[...slug]])",
+          "Parallel Routes: @slot syntax untuk dashboard layout",
+          "Intercepting Routes: (..) untuk modal/instagram-style feed",
+          "Route Handlers: streaming response (SSE), webhook receiver",
+          "Server Actions: mutation tanpa bikin API endpoint (form action)",
+          "Custom loading.tsx, error.tsx, global-error.tsx strategy",
+          "Next.js + SEO: sitemap.xml, robots.txt, canonical URL, hreflang untuk i18n"
+        ]
+      },
+      {
+        id: "fe6-p1",
+        title: "🚀 PROJECT: multi-lang-trading-platform",
+        done: false,
+        details: [
+          "Buat trading platform UI (kayak MIFX/Stockbit) dengan Next.js App Router + TypeScript",
+          "Implementasi i18n: support English & Bahasa Indonesia (next-intl), locale routing /en & /id",
+          "Buat real-time market watch: WebSocket price feed (pakai Binance/CoinGecko public API)",
+          "Render candlestick chart (lightweight-charts) dengan timeframe switcher",
+          "Implementasi order book UI dengan virtualized list (react-window)",
+          "Styling full pakai Tailwind CSS v4 (dark mode, responsive, design tokens)",
+          "SEO: sitemap.xml, robots.txt, metadata per page, hreflang tag",
+          "Deploy ke Vercel dengan custom domain (opsional)",
+          "Lighthouse audit: Performance > 90, SEO > 95"
+        ]
+      },
+      {
+        id: "fe6-s1",
+        title: "🎯 SYARAT LULUS SPRINT 6",
+        done: false,
+        details: [
+          "Bisa implementasi i18n (English + Indonesia) dengan locale routing & translation files",
+          "Bisa styling complex UI (trading dashboard) pakai Tailwind CSS tanpa inspekt element guessing",
+          "Bisa handle real-time data (WebSocket) & render chart tanpa freeze/lag",
+          "Paham Pages Router vs App Router & bisa migrasi antar keduanya",
+          "APPLY ke MIFX, Stockbit, Bibit, & platform trading lainnya dengan portfolio 🚀"
+        ]
+      }
+    ]
   }
 ];
