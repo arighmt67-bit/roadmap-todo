@@ -417,5 +417,203 @@ export const bcaPhases = [
         ]
       }
     ]
+  },
+  {
+    id: "bca-6",
+    title: "BACKEND — Sprint 6: Golang + Multi-Language Microservices (Bulan 11–12)",
+    description: "Tiket.com & fintech modern wajib Golang + Java. Sprint ini ngejar Go dari nol sampai production-grade.",
+    project: "go-booking-service (Polyglot Backend)",
+    tasks: [
+      {
+        id: "b6-1",
+        title: "Golang Fundamentals",
+        done: false,
+        details: [
+          "Syntax dasar: variabel, konstanta, tipe data, pointer",
+          "Control flow: if/else, switch, for (no while di Go!), defer",
+          "Function: multiple return value, variadic, closure, init()",
+          "Collection: slice (append, copy, capacity), map, array",
+          "Struct & Interface (embedding = komposisi, bukan inheritance)",
+          "Error handling: error interface, errors.Is(), errors.As(), panic/recover",
+          "Goroutines & Channels: concurrency model Go (go func, chan, select, WaitGroup)",
+          "Context package: timeout, cancellation, value passing (wajib untuk HTTP/DB)",
+          "Package management: go mod init, go.mod, go.sum, module versioning"
+        ]
+      },
+      {
+        id: "b6-2",
+        title: "Golang Web API (Gin / Echo)",
+        done: false,
+        details: [
+          "net/http standard library: Handler, ServeMux, middleware pattern",
+          "Gin framework: routing, middleware, context, JSON binding/validation",
+          "Echo framework (alternatif): similar concept, benchmark vs Gin",
+          "REST API CRUD: GET, POST, PUT, DELETE dengan proper HTTP status code",
+          "Database/SQL: database/sql + pgx driver untuk PostgreSQL",
+          "Connection pooling: sql.DB (SetMaxOpenConns, SetMaxIdleConns)",
+          "Repository pattern di Go (interface-based, testable)",
+          "Configuration: env variable (os.Getenv), viper, godotenv",
+          "Logging: structured logging dengan zerolog atau slog (Go 1.21+)",
+          "Graceful shutdown: tangkap SIGTERM/SIGINT, drain connection"
+        ]
+      },
+      {
+        id: "b6-3",
+        title: "Memcached + Multi-Cache Strategy",
+        done: false,
+        details: [
+          "Memcached basics: key-value store, in-memory, no persistence",
+          "Memcached vs Redis: kapan pakai yang mana (simplicity vs features)",
+          "Go client: github.com/bradfitz/gomemcache atau memcached-go",
+          "Cache-Aside pattern dengan Memcached (lazy loading)",
+          "Multi-tier caching: Redis (session/data) + Memcached (query result)",
+          "Cache invalidation: TTL-based, event-driven invalidation",
+          "Benchmark: latency comparison Redis vs Memcached untuk GET/SET"
+        ]
+      },
+      {
+        id: "b6-4",
+        title: "RabbitMQ (Event-Driven Alternatif Kafka)",
+        done: false,
+        details: [
+          "Konsep AMQP: Exchange, Queue, Binding, Routing Key",
+          "Exchange type: Direct, Fanout, Topic, Headers",
+          "Producer & Consumer pattern di Go (amqp091-go library)",
+          "Dead Letter Exchange (DLX) untuk error handling",
+          "Prefetch count (QoS): konsumer tidak overwhelm",
+          "Kafka vs RabbitMQ: ordering guarantee, scalability, persistence trade-off",
+          "Use case: order processing (booking → payment → notification via queue)",
+          "Docker: jalankan RabbitMQ + Management Plugin via docker-compose"
+        ]
+      },
+      {
+        id: "b6-p1",
+        title: "🚀 PROJECT: go-booking-service (Polyglot Backend)",
+        done: false,
+        details: [
+          "Buat Go microservice: Booking Service untuk travel app (kayak tiket.com)",
+          "API: POST /bookings (create), GET /bookings/{id}, GET /bookings?user_id=",
+          "Connect ke PostgreSQL (pgx) + caching pakai Redis (saldo/user data) + Memcached (search result)",
+          "Publish event ke RabbitMQ saat booking dibuat (consume oleh Notification Service Java)",
+          "Implementasi graceful shutdown + structured logging (slog)",
+          "Dockerize Go service (multi-stage build, scratch/distroless base)",
+          "Deploy side-by-side dengan Java microservice di K8s (polyglot architecture)",
+          "Verifikasi: Go service & Java service bisa communicate via RabbitMQ + REST API"
+        ]
+      },
+      {
+        id: "b6-s1",
+        title: "🎯 SYARAT LULUS SPRINT 6",
+        done: false,
+        details: [
+          "Bisa tulis Go REST API dari nol dengan proper error handling & middleware",
+          "Paham goroutine & channel — bisa jawab: 'kapan pakai channel vs mutex?'",
+          "Paham beda Memcached vs Redis & kapan kombinasi keduanya",
+          "Bisa jelaskan Kafka vs RabbitMQ trade-off dan kapan pilih yang mana",
+          "Polyglot architecture (Go + Java) jalan di K8s dengan message queue"
+        ]
+      }
+    ]
+  },
+  {
+    id: "bca-7",
+    title: "BACKEND — Sprint 7: ElasticSearch, TDD & Clean Code (Bulan 13–14)",
+    description: "Production quality: search engine, testing discipline, SOLID principles, code review culture.",
+    project: "search-engine + test-suite & refactor",
+    tasks: [
+      {
+        id: "b7-1",
+        title: "ElasticSearch (Search & Analytics)",
+        done: false,
+        details: [
+          "Konsep core: Index, Document, Shard, Replica, Mapping",
+          "Inverted index: kenapa ES cepat untuk full-text search",
+          "CRUD: index, get, update, delete document",
+          "Query DSL: match, term, bool (must, should, filter), range, aggs",
+          "Analyzer & Tokenizer: standard, whitespace, ngram, custom analyzer",
+          "Full-text search: relevance scoring (TF-IDF, BM25)",
+          "Aggregation: terms, avg, sum, date_histogram (analytics)",
+          "Java integration: Spring Data Elasticsearch atau REST High Level Client",
+          "Go integration: olivere/elastic atau official go-elasticsearch client",
+          "Log analysis: ElasticSearch + Kibana + Logstash/Fluentd (ELK Stack)",
+          "Indexing strategy: reindex, alias zero-downtime, mapping migration"
+        ]
+      },
+      {
+        id: "b7-2",
+        title: "TDD (Test-Driven Development)",
+        done: false,
+        details: [
+          "TDD cycle: RED (write failing test) → GREEN (make it pass) → REFACTOR",
+          "Test pyramid: Unit test (banyak) → Integration test (sedikit) → E2E test (dikit banget)",
+          "Java: JUnit 5 + Mockito + AssertJ + Testcontainers",
+          "Go: testing package, table-driven test, testify, gomock",
+          "Test coverage: jacoco (Java), go test -cover (Go), target > 80%",
+          "Integration test dengan Testcontainers: PostgreSQL, Kafka, Redis, ES real container",
+          "Mock vs Stub vs Fake vs Spy: bedanya apa?",
+          "TDD anti-pattern: testing implementation detail bukan behavior",
+          "Property-based testing (jqwik untuk Java, rapid untuk Go)"
+        ]
+      },
+      {
+        id: "b7-3",
+        title: "SOLID Principles & Clean Code",
+        done: false,
+        details: [
+          "S - Single Responsibility: 1 class/function = 1 alasan untuk berubah",
+          "O - Open/Closed: open for extension, closed for modification",
+          "L - Liskov Substitution: subclass bisa gantikan parent tanpa breaking",
+          "I - Interface Segregation: banyak interface kecil > 1 interface gede",
+          "D - Dependency Inversion: depend on abstraction, bukan concretion",
+          "Clean Code rules: meaningful names, small functions, minimal args, no deep nesting",
+          "Code smell: God class, feature envy, shotgun surgery, primitive obsession",
+          "Refactoring technique: extract method, replace conditional with polymorphism, introduce parameter object",
+          "Design patterns praktis: Strategy, Factory, Decorator, Observer, Repository, Unit of Work",
+          "Hexagonal Architecture (Ports & Adapters): isolate domain logic dari infrastructure"
+        ]
+      },
+      {
+        id: "b7-4",
+        title: "Code Review, Git Flow & Pair Programming",
+        done: false,
+        details: [
+          "Git Flow: main (production), develop (integration), feature/*, hotfix/*, release/*",
+          "Pull/Merge Request workflow: description, checklist, reviewers, approval",
+          "Code review etiquette: constructive, specific, suggest don't command, praise good code",
+          "Review checklist: logic correctness, security, performance, test coverage, naming",
+          "Pair programming: driver (ngetik) vs navigator (mikir/review), switch role tiap 15-25 menit",
+          "Mob programming basics (3+ orang, 1 keyboard, role rotation)",
+          "Pre-commit hooks: lint, format, test, secret scan (automate quality gate)"
+        ]
+      },
+      {
+        id: "b7-p1",
+        title: "🚀 PROJECT: Search Engine + Full Test Suite + Refactor",
+        done: false,
+        details: [
+          "Integrasi ElasticSearch ke booking service: search hotel/tiket dengan filter & sorting",
+          "Implementasi ELK Stack: kirim log dari Go & Java service ke ElasticSearch, visualisasi di Kibana",
+          "Tulis TDD untuk 1 fitur baru (mulai dari failing test): implementasi search suggest/autocomplete",
+          "Capai test coverage > 80% untuk service layer (Java + Go)",
+          "Refactor 1 modul monolith: apply SOLID, extract interface, pecah God class",
+          "Buat dokumentasi: Swagger/OpenAPI spec untuk semua endpoint",
+          "Setup SonarQube / CodeClimate: static analysis, track code smell & technical debt",
+          "Practice pair programming: invite teman/komunitas untuk code review session"
+        ]
+      },
+      {
+        id: "b7-s1",
+        title: "🎯 SYARAT LULUS SPRINT 7 — PRODUCTION READY",
+        done: false,
+        details: [
+          "Bisa implementasi ElasticSearch untuk search & log analysis tanpa tutorial",
+          "Sudah terbiasa TDD: nulis test sebelum code jadi reflex",
+          "Bisa review code orang lain & kasih feedback konstruktif",
+          "Bisa jawab interview: 'Apa itu SOLID? Beri contoh pelanggaran & cara fix-nya'",
+          "Bisa jawab: 'Jelaskan Git Flow & kapan pakai trunk-based development'",
+          "APPLY ke tiket.com Junior Backend, BCA Digital, & fintech lainnya dengan portfolio Go + Java 🚀"
+        ]
+      }
+    ]
   }
 ];
