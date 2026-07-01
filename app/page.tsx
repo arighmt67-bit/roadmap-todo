@@ -1,13 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
-import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy, Server, Boxes, ShieldAlert, MonitorSmartphone } from "lucide-react";
+import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy, Server, Boxes, ShieldAlert, MonitorSmartphone, Cloud } from "lucide-react";
 import { phases } from "./data";
 import { bcaPhases } from "./bca-data";
 import { devopsPhases } from "./devops-data";
 import { srePhases } from "./sre-data";
 import { frontendPhases } from "./frontend-data";
+import { cloudPhases } from "./cloud-data";
 
-type TabId = "general" | "backend" | "frontend" | "devops" | "sre";
+type TabId = "general" | "backend" | "frontend" | "devops" | "sre" | "cloud";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabId>("general");
@@ -16,6 +17,7 @@ export default function Home() {
   const [frontendData, setFrontendData] = useState(frontendPhases);
   const [devopsData, setDevopsData] = useState(devopsPhases);
   const [sreData, setSreData] = useState(srePhases);
+  const [cloudData, setCloudData] = useState(cloudPhases);
   const [expandedPhase, setExpandedPhase] = useState<string | null>(phases[0].id);
   const [mounted, setMounted] = useState(false);
 
@@ -55,6 +57,13 @@ export default function Home() {
     } else {
       localStorage.setItem("roadmap-frontend-v1", JSON.stringify(frontendPhases));
     }
+
+    const savedCloud = localStorage.getItem("roadmap-cloud-v1");
+    if (savedCloud) {
+      try { setCloudData(JSON.parse(savedCloud)); } catch (e) {}
+    } else {
+      localStorage.setItem("roadmap-cloud-v1", JSON.stringify(cloudPhases));
+    }
   }, []);
 
   const getDataForTab = (tab: TabId) => {
@@ -64,14 +73,15 @@ export default function Home() {
       case "frontend": return frontendData;
       case "devops": return devopsData;
       case "sre": return sreData;
+      case "cloud": return cloudData;
     }
   };
 
   const currentData = getDataForTab(activeTab);
 
   const toggleTask = (phaseId: string, taskId: string) => {
-    const setData = activeTab === "general" ? setGeneralData : activeTab === "backend" ? setBackendData : activeTab === "frontend" ? setFrontendData : activeTab === "devops" ? setDevopsData : setSreData;
-    const storageKey = activeTab === "general" ? "roadmap-progress-v3" : activeTab === "backend" ? "roadmap-backend-v1" : activeTab === "frontend" ? "roadmap-frontend-v1" : activeTab === "devops" ? "roadmap-devops-v1" : "roadmap-sre-v1";
+    const setData = activeTab === "general" ? setGeneralData : activeTab === "backend" ? setBackendData : activeTab === "frontend" ? setFrontendData : activeTab === "devops" ? setDevopsData : activeTab === "sre" ? setSreData : setCloudData;
+    const storageKey = activeTab === "general" ? "roadmap-progress-v3" : activeTab === "backend" ? "roadmap-backend-v1" : activeTab === "frontend" ? "roadmap-frontend-v1" : activeTab === "devops" ? "roadmap-devops-v1" : activeTab === "sre" ? "roadmap-sre-v1" : "roadmap-cloud-v1";
 
     const newData = currentData.map((phase) => {
       if (phase.id === phaseId) {
@@ -90,7 +100,7 @@ export default function Home() {
 
   const handleTabChange = (tab: TabId) => {
     setActiveTab(tab);
-    const firstId = tab === "general" ? phases[0].id : tab === "backend" ? bcaPhases[0].id : tab === "frontend" ? frontendPhases[0].id : tab === "devops" ? devopsPhases[0].id : srePhases[0].id;
+    const firstId = tab === "general" ? phases[0].id : tab === "backend" ? bcaPhases[0].id : tab === "frontend" ? frontendPhases[0].id : tab === "devops" ? devopsPhases[0].id : tab === "sre" ? srePhases[0].id : cloudPhases[0].id;
     setExpandedPhase(firstId);
   };
 
@@ -102,6 +112,7 @@ export default function Home() {
     { id: "frontend" as TabId, label: "Frontend", icon: MonitorSmartphone },
     { id: "devops" as TabId, label: "DevOps", icon: Boxes },
     { id: "sre" as TabId, label: "SRE (Fintech)", icon: ShieldAlert },
+    { id: "cloud" as TabId, label: "Cloud Engineer", icon: Cloud },
   ];
 
   return (
