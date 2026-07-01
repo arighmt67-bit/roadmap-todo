@@ -1,17 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
-import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy, Server, Boxes } from "lucide-react";
+import { CheckCircle2, Circle, ChevronDown, ChevronRight, Terminal, Trophy, Server, Boxes, ShieldAlert } from "lucide-react";
 import { phases } from "./data";
 import { bcaPhases } from "./bca-data";
 import { devopsPhases } from "./devops-data";
+import { srePhases } from "./sre-data";
 
-type TabId = "general" | "backend" | "devops";
+type TabId = "general" | "backend" | "devops" | "sre";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabId>("general");
   const [generalData, setGeneralData] = useState(phases);
   const [backendData, setBackendData] = useState(bcaPhases);
   const [devopsData, setDevopsData] = useState(devopsPhases);
+  const [sreData, setSreData] = useState(srePhases);
   const [expandedPhase, setExpandedPhase] = useState<string | null>(phases[0].id);
   const [mounted, setMounted] = useState(false);
 
@@ -19,23 +21,30 @@ export default function Home() {
     setMounted(true);
     const savedGeneral = localStorage.getItem("roadmap-progress-v3");
     if (savedGeneral) {
-      try { setGeneralData(JSON.parse(savedGeneral)); } catch (e) { }
+      try { setGeneralData(JSON.parse(savedGeneral)); } catch (e) {}
     } else {
       localStorage.setItem("roadmap-progress-v3", JSON.stringify(phases));
     }
 
     const savedBackend = localStorage.getItem("roadmap-backend-v1");
     if (savedBackend) {
-      try { setBackendData(JSON.parse(savedBackend)); } catch (e) { }
+      try { setBackendData(JSON.parse(savedBackend)); } catch (e) {}
     } else {
       localStorage.setItem("roadmap-backend-v1", JSON.stringify(bcaPhases));
     }
 
     const savedDevops = localStorage.getItem("roadmap-devops-v1");
     if (savedDevops) {
-      try { setDevopsData(JSON.parse(savedDevops)); } catch (e) { }
+      try { setDevopsData(JSON.parse(savedDevops)); } catch (e) {}
     } else {
       localStorage.setItem("roadmap-devops-v1", JSON.stringify(devopsPhases));
+    }
+
+    const savedSre = localStorage.getItem("roadmap-sre-v1");
+    if (savedSre) {
+      try { setSreData(JSON.parse(savedSre)); } catch (e) {}
+    } else {
+      localStorage.setItem("roadmap-sre-v1", JSON.stringify(srePhases));
     }
   }, []);
 
@@ -44,14 +53,15 @@ export default function Home() {
       case "general": return generalData;
       case "backend": return backendData;
       case "devops": return devopsData;
+      case "sre": return sreData;
     }
   };
 
   const currentData = getDataForTab(activeTab);
 
   const toggleTask = (phaseId: string, taskId: string) => {
-    const setData = activeTab === "general" ? setGeneralData : activeTab === "backend" ? setBackendData : setDevopsData;
-    const storageKey = activeTab === "general" ? "roadmap-progress-v3" : activeTab === "backend" ? "roadmap-backend-v1" : "roadmap-devops-v1";
+    const setData = activeTab === "general" ? setGeneralData : activeTab === "backend" ? setBackendData : activeTab === "devops" ? setDevopsData : setSreData;
+    const storageKey = activeTab === "general" ? "roadmap-progress-v3" : activeTab === "backend" ? "roadmap-backend-v1" : activeTab === "devops" ? "roadmap-devops-v1" : "roadmap-sre-v1";
 
     const newData = currentData.map((phase) => {
       if (phase.id === phaseId) {
@@ -70,7 +80,7 @@ export default function Home() {
 
   const handleTabChange = (tab: TabId) => {
     setActiveTab(tab);
-    const firstId = tab === "general" ? phases[0].id : tab === "backend" ? bcaPhases[0].id : devopsPhases[0].id;
+    const firstId = tab === "general" ? phases[0].id : tab === "backend" ? bcaPhases[0].id : tab === "devops" ? devopsPhases[0].id : srePhases[0].id;
     setExpandedPhase(firstId);
   };
 
@@ -80,6 +90,7 @@ export default function Home() {
     { id: "general" as TabId, label: "General Roadmap", icon: Terminal },
     { id: "backend" as TabId, label: "Backend", icon: Server },
     { id: "devops" as TabId, label: "DevOps", icon: Boxes },
+    { id: "sre" as TabId, label: "SRE (Fintech)", icon: ShieldAlert },
   ];
 
   return (
@@ -100,7 +111,6 @@ export default function Home() {
           <p className="text-xl text-gray-400">Follow this curriculum to transition into Cloud & Backend roles.</p>
         </div>
 
-        {/* TAB NAVIGATION */}
         <div className="flex flex-wrap justify-center mb-8 gap-2">
           <div className="inline-flex flex-wrap rounded-lg border border-gray-700 bg-[#1b1b32] p-1">
             {tabs.map((tab) => {
