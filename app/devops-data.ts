@@ -436,5 +436,83 @@ export const devopsPhases = [
         ]
       }
     ]
+  },
+  {
+    id: "dev-6",
+    title: "DEVOPS — Sprint 6: Fintech & High Availability (Bulan 11–12)",
+    description: "Persiapan spesifik untuk role SRE di industri Fintech (skalabilitas, resilience, security).",
+    project: "fintech-sre-toolkit",
+    tasks: [
+      {
+        id: "d6-1",
+        title: "Advanced Cloud & Infrastructure",
+        done: false,
+        details: [
+          "Alibaba Cloud essentials: ECS, VPC, OSS, RDS, SLB (bandingkan dengan AWS)",
+          "Infrastructure as Code (IaC) advanced: modul Terraform untuk multi-cloud (AWS + Alibaba)",
+          "Web Server tuning: Nginx performance optimization, reverse proxy caching, TLS 1.3 setup",
+          "Load Balancing & Failover: Active-Passive setup, health checks, routing failover",
+          "Security & Compliance: IAM strict policies, Security Groups, WAF, enkripsi data at rest & in transit"
+        ]
+      },
+      {
+        id: "d6-2",
+        title: "Programming & Automation",
+        done: false,
+        details: [
+          "Golang for SRE: syntax dasar, goroutines untuk concurrent tasks, build CLI tools",
+          "Python automation: script untuk sinkronisasi database, rotasi kredensial, log parsing",
+          "Bash scripting advanced: integrasi jq untuk JSON, parallel processing, error handling (set -e)",
+          "Automated provisioning: orchestrasi Terraform + Ansible via GitLab CI"
+        ]
+      },
+      {
+        id: "d6-3",
+        title: "Database Reliability & Security",
+        done: false,
+        details: [
+          "SQL & NoSQL: manajemen PostgreSQL/MySQL & MongoDB/Redis",
+          "Database Tuning: query optimization, connection pooling (PgBouncer), index tuning",
+          "High Availability DB: replikasi master-slave, otomatisasi failover (Patroni/MHA)",
+          "Database Provisioning: otomasi deployment DB dengan Ansible",
+          "Backup & Recovery: point-in-time recovery, otomasi backup harian ke S3/OSS"
+        ]
+      },
+      {
+        id: "d6-4",
+        title: "Fintech SRE Practices",
+        done: false,
+        details: [
+          "Risk Management: mitigasi single point of failure (SPOF), disaster recovery plan",
+          "Observability advanced: trace distributed systems (Jaeger/Zipkin), alert fatigue reduction",
+          "Monitoring SLA/SLO: implementasi error budget, dashboard khusus uptime layanan",
+          "Security audits: otomatisasi vulnerability scanning (Trivy) di CI/CD",
+          "Incident communication: role play komunikasi saat P1 incident"
+        ]
+      },
+      {
+        id: "d6-p1",
+        title: "🚀 PROJECT: fintech-sre-toolkit",
+        done: false,
+        details: [
+          "Buat Golang CLI tool untuk cek status SSL certificate dan expired date seluruh domain",
+          "Setup CI/CD pipeline di GitLab yang deploy infrastruktur ke AWS/Alibaba menggunakan Terraform",
+          "Implementasi Nginx sebagai load balancer dengan konfigurasi failover ke backend cadangan",
+          "Setup database PostgreSQL dengan replikasi streaming dan otomatisasi backup via Python script",
+          "Buat arsitektur diagram visual (Draw.io/Excalidraw) sistem HA dengan multi-AZ dan presentasikan"
+        ]
+      },
+      {
+        id: "d6-s1",
+        title: "🎯 SYARAT LULUS SPRINT 6",
+        done: false,
+        details: [
+          "Mampu menulis script Golang dan Python untuk otomatisasi tugas SRE",
+          "Paham dan bisa implementasi clustering, load balancing, dan failover system",
+          "Database aman, termonitor, dan memiliki strategi backup/failover yang teruji",
+          "Siap secara teknis dan mental untuk apply role DevOps/SRE di industri Fintech!"
+        ]
+      }
+    ]
   }
 ];
